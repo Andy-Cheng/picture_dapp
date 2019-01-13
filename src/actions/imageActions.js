@@ -1,5 +1,6 @@
 import { keyBy } from 'lodash'
 import { ipfs } from '../utils/ipfs'
+import axios from 'axios'
 
 import {
   GET_ALLIMAGES,
@@ -10,7 +11,22 @@ import {
   UPLOAD_IMAGE,
   UPLOAD_IMAGE_SUCCESS,
   SET_ERROR,
+  SIMILARITY
 } from './types'
+
+
+const clientId = "9aae21d04b5bed9"
+const postImgurOptions = {
+  method: 'post',
+  url: 'https://api.imgur.com/3/image/',
+  headers: {'Authorization': `Client-ID ${clientId}`, 'Content-Type': 'multipart/form-data'}
+};
+
+const checkSimilarity = {
+  method: "post",
+  url: "http://140.112.18.202:8000",
+  headers: {"Content-Type": "application/json"}
+}
 
 const allAllImagesFlag = 'ALL'
 // Get all the images
@@ -136,10 +152,26 @@ export const getImages = () => async (dispatch, getState) => {
 }
 
 // upload an image
-export const uploadImage = (buffer, title, description, tags) => async (
+export const uploadImage = (buffer, title, description, tags, fileToImgur) => async (
   dispatch,
   getState
 ) => {
+  const form = new FormData();
+  form.append("image", fileToImgur)
+
+  await axios({...postImgurOptions, data: form})
+    .then((res)=>{
+      const imgUrl = `https://i.imgur.com/${res.data.data.id}.png`;
+      console.log("imgurl in similarity call", imgUrl)
+      return axios({...checkSimilarity, data:{url: imgUrl}});
+    }).then(  (res)=>{
+       dispatch(similarityCallBack(res.data));
+    })
+    .catch((err)=>{
+      console.log(`upload to imgur error: ${err}`)
+    })
+
+
   dispatch({ type: UPLOAD_IMAGE })
 
   // Add image to IPFS
@@ -239,3 +271,8 @@ const convertTimestampToString = (timestamp) => {
   let tempDate = timestamp.toNumber()
   return tempDate !== 0 ? new Date(tempDate * 1000).toString() : null
 }
+
+const similarityCallBack = (similarity) => ({
+  type: SIMILARITY,
+  payload: similarity
+});

@@ -6,7 +6,8 @@ import {
   GET_IMAGE,
   SET_ERROR,
   UPLOAD_IMAGE,
-  UPLOAD_IMAGE_SUCCESS
+  UPLOAD_IMAGE_SUCCESS,
+  SIMILARITY
 } from "../actions/types";
 
 const initialState = {
@@ -14,7 +15,8 @@ const initialState = {
   images: null,
   image: null,
   loading: false,
-  error: null
+  error: null,
+  similarity: null
 };
 
 export default (state = initialState, action) => {
@@ -86,6 +88,11 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.payload
+      };
+    case SIMILARITY:
+      return {
+        ...state,
+        similarity: action.payload
       };
     default:
       return state;

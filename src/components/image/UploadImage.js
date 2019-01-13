@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import toastr from 'toastr'
-
 import { uploadImage } from '../../actions/imageActions'
 import Spinner from '../common/Spinner'
+import { message } from 'antd'
+
 
 class UploadImage extends Component {
   state = {
@@ -13,6 +14,7 @@ class UploadImage extends Component {
     tags: '',
     buffer: null,
     file: null,
+    fileToImgur: null,
   }
 
   handleChange = (event) => {
@@ -23,30 +25,34 @@ class UploadImage extends Component {
 
   captureFile = (event) => {
     const file = event.target.files[0]
+    console.log("file is ", file)
     const reader = new window.FileReader()
     reader.readAsArrayBuffer(file)
     reader.onloadend = () => {
       this.setState({
         buffer: Buffer(reader.result),
         file: URL.createObjectURL(file),
+        fileToImgur: file,
       })
     }
   }
 
   handleUploadImage = async (event) => {
     event.preventDefault()
-    const { title, description, tags, buffer } = this.state
+    const { title, description, tags, buffer, fileToImgur } = this.state
     // console.log(title, description, buffer)
     try {
-      await this.props.uploadImage(buffer, title, description, tags)
+      await this.props.uploadImage(buffer, title, description, tags, fileToImgur)
       toastr.success(
         '上傳作品成功至星際檔案系統，等待Metamask確認將IPFS hash存至以太鏈'
-      )
+      );
+      message.warning("你的上傳與其作品的距離", 5);
+      Object.keys(this.props.similarity).map((objKey)=>{
+        message.warning(`${objKey}: ${this.props.similarity[objKey]}`, 8)
+      });
     } catch (error) {
-      toastr.error(error)
+      // toastr.error(error)
     }
-
-    // return to image list
     this.props.history.push('/user')
   }
 
@@ -152,6 +158,7 @@ class UploadImage extends Component {
 
 const mapStateToProps = (state) => ({
   loading: state.image.loading,
+  similarity: state.image.similarity,
 })
 
 export default connect(
