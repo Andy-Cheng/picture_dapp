@@ -33,7 +33,6 @@ export const web3Connect = () => async (dispatch, getState) => {
 
     // Watch for account change as described here:
     // https://medium.com/coinmonks/
-    // detecting-metamask-account-or-network-change-in-javascript-using-web3-1-0-0-18433e99df5a
     web3.currentProvider.publicConfigStore.on(
       'update',
       async ({ selectedAddress }) => {

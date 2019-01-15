@@ -217,11 +217,6 @@ export const uploadImage = (buffer, title, description, tags, fileToImgur) => as
           gasUsed,
         } = txReceipt.receipt
 
-        // // Determine index based on length of images array; otherwise,
-        // // would need to call contract to get length
-        // const index = getState().image.images.length
-        //   ? getState().image.images.length
-        //   : 0
 
         const newImage = {
           ipfsHash,

@@ -1,7 +1,8 @@
 {
-  "name": "ipfs-image-app",
+  "name": "picture_blockchain",
   "version": "0.1.0",
   "private": true,
+  "author": "Andy Cheng",
   "dependencies": {
     "antd": "^3.11.6",
     "autoprefixer": "7.1.6",
@@ -66,7 +67,6 @@
     "start": "node scripts/start.js",
     "ipfs": "ipfs daemon",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom",
     "sol:lint": "./node_modules/.bin/solium -d ./contracts",
     "sol:test": "truffle test",
     "sol:coverage": "./node_modules/.bin/solidity-coverage",

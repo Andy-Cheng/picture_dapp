@@ -19,15 +19,6 @@ contract ImageRegister is Destructible {
     
     bool private stopped = false;
 
-    /**
-    * @dev Indicates that a user has uploaded a new image
-    * @param _owner The owner of the image
-    * @param _ipfsHash The IPFS hash
-    * @param _title The image title
-    * @param _description The image description
-    * @param _tags The image tags
-    * @param _uploadedOn The upload timestamp
-    */
     event LogImageUploaded(
         address indexed _owner, 
         string _ipfsHash, 
@@ -37,31 +28,18 @@ contract ImageRegister is Destructible {
         uint256 _uploadedOn
     );
 
-    /**
-    * @dev Indicates that the owner has performed an emergency stop
-    * @param _owner The owner of the image
-    * @param _stop Indicates whether to stop or resume
-    */
+
     event LogEmergencyStop(
         address indexed _owner, 
         bool _stop
     );
 
-    /**
-    * @dev Prevents execution in the case of an emergency
-    */
+
     modifier stopInEmergency { 
         require(!stopped); 
         _;
     }
 
-    /**  
-    * @dev This function is called for all messages sent to
-    * this contract (there is no other function).
-    * Sending Ether to this contract will cause an exception,
-    * because the fallback function does not have the `payable`
-    * modifier.
-    */
     function() public {}
 
     function getOwnersCount(address _owner) 
@@ -74,13 +52,7 @@ contract ImageRegister is Destructible {
     }
 
 
-    /** 
-        * @notice associate an image entry with the owner i.e. sender address
-        * @param _ipfsHash The IPFS hash
-        * @param _title The image title
-        * @param _description The image description
-        * @param _tags The image tag(s)
-        */
+
     function uploadImage(
         string _ipfsHash, 
         string _title, 
@@ -126,11 +98,7 @@ contract ImageRegister is Destructible {
         _success = true;
     }
 
-    /** 
-    * @notice Returns the number of images associated with the given address
-    * @param _owner The owner address
-    * @return The number of images associated with a given address
-    */
+
     function getImageCount(address _owner) 
         public view 
         stopInEmergency 
@@ -148,16 +116,7 @@ contract ImageRegister is Destructible {
         require(_owner != 0x0);
         return ownerToImages[_owner].length;
     }
-    /** 
-    * @notice Returns the image at index in the ownership array
-    * @param _owner The owner address
-    * @param _index The index of the image to return
-    * @return _ipfsHash The IPFS hash
-    * @return _title The image title
-    * @return _description The image description
-    * @return _tags image Then image tags
-    * @return _uploadedOn The uploaded timestamp
-    */ 
+
     function getImage(address _owner, uint8 _index) 
         public stopInEmergency view returns (
         string _ipfsHash, 
@@ -211,11 +170,7 @@ contract ImageRegister is Destructible {
         );
     }
 
-    /**
-    * @notice Pause the contract. 
-    * It stops execution if certain conditions are met and can be useful 
-    * when new errors are discovered. 
-    */
+
     function emergencyStop(bool _stop) public onlyOwner {
         stopped = _stop;
         emit LogEmergencyStop(owner, _stop);
