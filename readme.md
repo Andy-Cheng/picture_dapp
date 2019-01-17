@@ -71,3 +71,11 @@ and in another terminal
 ```
     npm start
 ```
+5. Host tensorflow model server
+```
+    docker pull chuanchung/imgsim
+    docker run -d --net=host chuanchung/imgsim tensorflow_model_server --port=8500 --model_name="images" --model_base_path="/home/Imgsim-Server/inception_serving" 
+    docker exec -it [container_id] /bin/bash
+    cd /home/Imgsim-Server/
+    gunicorn -b 0.0.0.0:8000 --reload img.app
+```
