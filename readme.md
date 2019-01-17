@@ -71,8 +71,7 @@ and in another terminal
 ```
     npm start
 ```
-5. Host servers for similarity checking
-Pull the image containing our servers, and host tensorflow model server
+5. To host servers for similarity checking, pull the image containing our servers and host tensorflow model server.
 ```
     docker pull chuanchung/imgsim
     docker run -d --net=host chuanchung/imgsim tensorflow_model_server --port=8500 --model_name="images" --model_base_path="/home/Imgsim-Server/inception_serving" 
