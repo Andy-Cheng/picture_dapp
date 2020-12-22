@@ -1,6 +1,5 @@
 # Picture Blockchain
 ## About this project
-**Author:** Andy Cheng
 This project is an Dapp, allowiong users uploading pictures and their comments. Each user has a Metamask account, with an unique address( namely, its public key ). Also, when a user upload an image, its similarity with other images which have been uploaded will be checked and the user will be given an warning about the distance(the higher the more similar) between those's images.
 
 ![](./pics/home1.png "Home")
